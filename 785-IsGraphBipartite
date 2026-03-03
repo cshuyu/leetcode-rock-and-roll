@@ -1,0 +1,31 @@
+# Last updated: 3/2/2026, 6:28:40 PM
+1class Solution:
+2    def isBipartite(self, graph: List[List[int]]) -> bool:
+3        n = len(graph)
+4        # color array: 0 means uncolored, 1 means Red, -1 means Blue
+5        color = [0] * n 
+6        
+7        # We must iterate through all nodes to catch disconnected components!
+8        for i in range(n):
+9            # If the node is uncolored, it's the start of a new component
+10            if color[i] == 0:
+11                queue = deque([i])
+12                color[i] = 1  # Paint the starting node Red
+13                
+14                while queue:
+15                    curr_node = queue.popleft()
+16                    
+17                    for neighbor in graph[curr_node]:
+18                        # Case 1: Neighbor is uncolored
+19                        if color[neighbor] == 0:
+20                            # Paint it the opposite color of the current node
+21                            color[neighbor] = -color[curr_node] 
+22                            queue.append(neighbor)
+23                            
+24                        # Case 2: Neighbor is colored, and it's the SAME color!
+25                        elif color[neighbor] == color[curr_node]:
+26                            return False # Conflict found, not bipartite.
+27                            
+28        return True
+29
+30
